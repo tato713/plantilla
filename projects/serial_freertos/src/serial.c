@@ -55,7 +55,7 @@
 /* === Inclusiones de cabeceras ============================================ */
 #include <stdint.h>
 #include <string.h>
-#include "serial.h"
+#include "FreeRTOS.h"
 #include "led.h"
 #include "switch.h"
 #include "uart.h"
@@ -196,7 +196,7 @@ void Teclado(void * parametros) {
          }
          anterior = tecla;
       }
-      vTaskDelay(100);
+      vTaskDelay(pdMS_TO_TICKS(100));
       Led_Toggle(GREEN_LED);
    }
 }
@@ -210,14 +210,15 @@ void Enviar(void * parametros) {
       Led_On(YELLOW_LED);
       /* Espera que se transmita la primera cadena */
       if (EnviarTexto("Hola ")) {
-         xEventGroupWaitBits(eventos, EVENTO_COMPLETO, TRUE, 
-            FALSE, portMAX_DELAY);
+         xEventGroupWaitBits(eventos, EVENTO_COMPLETO, TRUE, FALSE, portMAX_DELAY);
+         // ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
       }
+      Led_Off(YELLOW_LED);
 
       /* Espera que se transmita la segunda cadena */
       if (EnviarTexto("Mundo\r\n")) {
-         xEventGroupWaitBits(eventos, EVENTO_COMPLETO, TRUE, 
-            FALSE, portMAX_DELAY);
+         xEventGroupWaitBits(eventos, EVENTO_COMPLETO, TRUE, FALSE, portMAX_DELAY);
+         // ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
       }
 
       Led_Off(YELLOW_LED);
@@ -227,8 +228,11 @@ void Enviar(void * parametros) {
 /* === Definiciones de funciones externas ================================== */
 
 void UART2_IRQHandler(void) {
+   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
    if (EnviarCaracter()) {
-      xEventGroupSetBitsFromISR(eventos, EVENTO_COMPLETO);
+      xEventGroupSetBitsFromISR(eventos, EVENTO_COMPLETO, &xHigherPriorityTaskWoken);
+      // vTaskNotifyGiveFromISR(enviar, &xHigherPriorityTaskWoken);
+      portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
    };
 }
 
@@ -246,19 +250,19 @@ int main(void) {
    Init_Switches();
    Init_Uart_Ftdi();
 
-   NVIC_EnableIRQ(26);
+   NVIC_SetPriority(USART2_IRQn, 5);
+   NVIC_EnableIRQ(USART2_IRQn);
 
    /* Creación del grupo de eventos */
    eventos = xEventGroupCreate();
 
    /* Creación de las tareas */
    if (eventos != NULL) {
-      xTaskCreate(Teclado, "Teclado", configMINIMAL_STACK_SIZE, 
-         NULL, tskIDLE_PRIORITY + 2, NULL);
+      xTaskCreate(Teclado, "Teclado", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL);
       
-      xTaskCreate(Enviar, "Enviar", configMINIMAL_STACK_SIZE, 
-         NULL, tskIDLE_PRIORITY + 1, &enviar);
+      xTaskCreate(Enviar, "Enviar", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &enviar);
       
+      SisTick_Init();
       /* Arranque del sistema operativo */
       vTaskStartScheduler();
    }
