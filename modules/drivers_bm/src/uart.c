@@ -191,7 +191,7 @@ uint32_t Init_Uart_Rs232(void)
 
 	/* UART3 (RS232) */
 	Chip_UART_Init(RS232_UART);
-	Chip_UART_SetBaud(RS232_UART, 115200);
+	Chip_UART_SetBaud(RS232_UART, 9600);
 
 	Chip_UART_SetupFIFOS(RS232_UART, UART_FCR_FIFO_EN | UART_FCR_TRG_LEV0);
 
@@ -236,6 +236,7 @@ uint8_t ReadByte_Uart_Ftdi(uint8_t* dat)
 		return FALSE;
 	}
 }
+
 
 uint8_t ReadByte_Uart_Rs232(uint8_t* dat)
 {

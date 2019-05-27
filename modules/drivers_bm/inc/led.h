@@ -61,7 +61,7 @@ enum LED_COLOR {RGB_R_LED, RGB_G_LED, RGB_B_LED, RED_LED, YELLOW_LED, GREEN_LED}
 /** \brief Definition of constants to control the EDU-CIAA leds.
  **
  **/
-enum LED_STATUS {OFF, ON};
+enum LED_STATUS {LED_OFF, LED_ON};
 
 
 /*==================[external functions declaration]=========================*/
