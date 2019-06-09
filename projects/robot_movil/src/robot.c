@@ -112,7 +112,7 @@ static uint8_t pos_parado=60;
 static mov_direccion direccion;
 static uint8_t secuencia;
 
-static uint8_t secuencia_torso[16]={0,10,38,80,128,176,218,245,255,245,218,176,128,80,38,10};
+static uint8_t secuencia_torso[16]={255,245,218,176,128,80,38,10,0,10,38,80,128,176,218,245};
 static uint8_t secuencia_brazo_I[16]={128,176,218,245,255,245,218,176,128,80,38,10,0,10,38,80};
 static uint8_t secuencia_brazo_D[16]={128,80,38,10,0,10,38,80,128,176,218,245,255,245,218,176};
 static uint8_t secuencia_pierna_I[16]={128,80,38,10,0,10,38,80,128,176,218,245,255,245,218,176};

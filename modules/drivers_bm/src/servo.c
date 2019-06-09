@@ -31,7 +31,7 @@
  *
  */
 
-/** \brief Stepper Drivers Functions and Ports assignment
+/** \brief Servo PWM Drivers Functions and Ports assignment
  **
  **
  **
@@ -42,7 +42,7 @@
 
 /** \addtogroup Examples CIAA Firmware Examples
  ** @{ */
-/** \addtogroup Baremetal Stepper Driver
+/** \addtogroup Baremetal Servo PWM Driver
  ** @{ */
 
 /*
@@ -146,7 +146,6 @@ void ServoMove(uint8_t servos,uint16_t angle){
     while(i<MAXQSERVOS){
         if(((servos&(1<<i))!=0)&&(angle<=180)&&(angle>=0)){
 			Chip_SCTPWM_SetDutyCycle(LPC_SCT, servos_list[i]->index +1,(Chip_SCTPWM_GetTicksPerCycle(LPC_SCT)/SERVO_COMPLETECYCLE_PERIOD)*(SERVO_MINUPTIME_PERIOD+((180-angle)*(SERVO_MAXUPTIME_PERIOD-SERVO_MINUPTIME_PERIOD))/180));
-			//Chip_SCTPWM_PercentageToTicks(LPC_SCT,((SERVO_MINUPTIME_PERIOD+(angle*(SERVO_MAXUPTIME_PERIOD-SERVO_MINUPTIME_PERIOD))/180)*100)/SERVO_COMPLETECYCLE_PERIOD));
         }
         i=i+1;
     }
