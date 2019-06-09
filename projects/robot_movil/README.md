@@ -23,4 +23,6 @@ Los servos utilizados (SG90) pueden moverse un ángulo de 180° desde una posici
 
 Para simplificar el movimiento, cada pata (y el torso) sigue una secuencia de posiciones definidas para sí misma. Una tarea llamada "Moverse" controla en qué dirección cambia la secuencia, y si es que cambia. Cada servo tiene una tarea que lo controla y la velocidad en que cambia de punto en la secuencia es el delay al finalizar una de estas tareas. Cada tarea antes mencionada tiene un take y un give de un semáforo para no superponerse. La secuencia de cada servo fue modelada como funciones senoidales, pero se plantearon otras alternativas.
 
-![Video](https://drive.google.com/drive/folders/1gN62DL2nefFQeKDxOLYt7YpzKAHHRn8V?usp=sharing)
+## Videos
+
+https://drive.google.com/drive/folders/1gN62DL2nefFQeKDxOLYt7YpzKAHHRn8V?usp=sharing
